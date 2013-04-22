@@ -43,12 +43,17 @@ public class VerticalSeekBar extends SeekBar {
 
 		super.onDraw(c);
 	}
+	
+	@Override
+	public void setProgress(int p) {
+		super.setProgress(p);
+		onSizeChanged(getWidth(), getHeight(), 0, 0);
+	}
 
 	private void trackTouchEvent(MotionEvent event) {
 		int i = 0;
 		i = getMax() - (int) (getMax() * event.getY() / getHeight());
-		setProgress(i);
-		onSizeChanged(getWidth(), getHeight(), 0, 0);
+		setProgress(i);		
 	}
 
 	@Override
