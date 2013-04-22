@@ -18,7 +18,7 @@ public class Main extends Activity implements OnSeekBarChangeListener {
 		setContentView(R.layout.main);
 		
 		axis_z = (VerticalSeekBar) findViewById(R.id.seek_bar_axis_z);
-		axis_z.setOnSeekBarChangeListener(this);
+		axis_z.setOnVerticalSeekBarChangeListener(this);
 	}
 
 	@Override
