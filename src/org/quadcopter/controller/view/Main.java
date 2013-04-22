@@ -10,7 +10,9 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 
 public class Main extends Activity implements OnSeekBarChangeListener {
-	private VerticalSeekBar axis_z;
+	private static final String TAG = "MainActiviy";
+	
+	private VerticalSeekBar axis_z, axis_y;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -19,11 +21,14 @@ public class Main extends Activity implements OnSeekBarChangeListener {
 		
 		axis_z = (VerticalSeekBar) findViewById(R.id.seek_bar_axis_z);
 		axis_z.setOnVerticalSeekBarChangeListener(this);
+		
+		axis_y = (VerticalSeekBar) findViewById(R.id.seek_bar_axis_y);
+		axis_y.setOnVerticalSeekBarChangeListener(this);
 	}
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-		Log.e("Main", "progress="+progress);
+		Log.d(TAG, "progress="+progress);
 	}
 
 	@Override
@@ -31,7 +36,10 @@ public class Main extends Activity implements OnSeekBarChangeListener {
 	}
 
 	@Override
-	public void onStopTrackingTouch(SeekBar seekBar) {		
+	public void onStopTrackingTouch(SeekBar seekBar) {
+		if (seekBar == axis_y) {
+			axis_y.setProgress(4);
+		}
 	}
 
 }

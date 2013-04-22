@@ -33,8 +33,33 @@
             android:layout_height="fill_parent"
             android:layout_gravity="center_horizontal"
             android:max="255"
-            android:maxHeight="1000dp" />
-        
+            android:maxHeight="1000dp" />        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/axis_y"
+        android:layout_width="100dp"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/status"
+        android:layout_toRightOf="@+id/axis_z"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/y_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/y_label" />
+
+        <!-- android:maxHeight="1000dp" is a hack to centralize thumb -->
+        <org.quadcopter.controller.util.VerticalSeekBar
+            android:id="@+id/seek_bar_axis_y"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal"
+            android:max="7"
+            android:progress="4"
+            android:maxHeight="1000dp" />        
     </LinearLayout>
 
 </RelativeLayout>
