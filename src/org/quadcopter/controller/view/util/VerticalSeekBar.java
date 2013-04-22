@@ -1,4 +1,4 @@
-package org.quadcopter.controller.util;
+package org.quadcopter.controller.view.util;
 
 import android.content.Context;
 import android.graphics.Canvas;

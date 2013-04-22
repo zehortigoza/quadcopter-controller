@@ -6,17 +6,66 @@
     <TextView
         android:id="@+id/status"
         android:layout_width="match_parent"
-        android:layout_height="16dp"
+        android:layout_height="wrap_content"
         android:layout_marginRight="5dp"
+        android:layout_marginBottom="10dp"
         android:gravity="right"
-        android:text="@string/status_disconnected"
+        android:text="@string/status"
         android:textStyle="bold" />
+    
+    <LinearLayout
+        android:id="@+id/rotate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/status">
+        
+        <TextView
+            android:id="@+id/rotate_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/rotate_label" />
+
+        <SeekBar
+            android:id="@+id/seek_bar_rotate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:max="2"
+            android:progress="1" />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/axis_x"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+        
+        <TextView
+            android:id="@+id/x_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/x_label" />
+        <SeekBar
+            android:id="@+id/seek_bar_axis_x"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:max="6"
+            android:progress="3"/>
+        
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/axis_z"
         android:layout_width="100dp"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/status"
+        android:layout_below="@+id/rotate"
+        android:layout_above="@+id/axis_x"
         android:orientation="vertical" >
 
         <TextView
@@ -27,7 +76,7 @@
             android:text="@string/z_label" />
 
         <!-- android:maxHeight="1000dp" is a hack to centralize thumb -->
-        <org.quadcopter.controller.util.VerticalSeekBar
+        <org.quadcopter.controller.view.util.VerticalSeekBar
             android:id="@+id/seek_bar_axis_z"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -35,14 +84,15 @@
             android:max="255"
             android:maxHeight="1000dp" />        
     </LinearLayout>
-    
+       
     <LinearLayout
         android:id="@+id/axis_y"
         android:layout_width="100dp"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/status"
-        android:layout_toRightOf="@+id/axis_z"
-        android:orientation="vertical" >
+        android:layout_below="@+id/rotate"
+        android:layout_above="@+id/axis_x"
+        android:orientation="vertical"
+        android:layout_alignParentRight="true">
 
         <TextView
             android:id="@+id/y_label"
@@ -52,13 +102,13 @@
             android:text="@string/y_label" />
 
         <!-- android:maxHeight="1000dp" is a hack to centralize thumb -->
-        <org.quadcopter.controller.util.VerticalSeekBar
+        <org.quadcopter.controller.view.util.VerticalSeekBar
             android:id="@+id/seek_bar_axis_y"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="center_horizontal"
-            android:max="7"
-            android:progress="4"
+            android:max="6"
+            android:progress="3"
             android:maxHeight="1000dp" />        
     </LinearLayout>
 

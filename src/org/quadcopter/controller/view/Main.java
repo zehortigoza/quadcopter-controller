@@ -1,6 +1,6 @@
 package org.quadcopter.controller.view;
 import org.quadcopter.controller.R;
-import org.quadcopter.controller.util.VerticalSeekBar;
+import org.quadcopter.controller.view.util.VerticalSeekBar;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ public class Main extends Activity implements OnSeekBarChangeListener {
 	private static final String TAG = "MainActiviy";
 	
 	private VerticalSeekBar axis_z, axis_y;
+	private SeekBar axis_x, axis_rotate;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,12 @@ public class Main extends Activity implements OnSeekBarChangeListener {
 		
 		axis_y = (VerticalSeekBar) findViewById(R.id.seek_bar_axis_y);
 		axis_y.setOnVerticalSeekBarChangeListener(this);
+		
+		axis_x = (SeekBar) findViewById(R.id.seek_bar_axis_x);
+		axis_x.setOnSeekBarChangeListener(this);
+		
+		axis_rotate = (SeekBar) findViewById(R.id.seek_bar_rotate);
+		axis_rotate.setOnSeekBarChangeListener(this);
 	}
 
 	@Override
@@ -37,8 +44,10 @@ public class Main extends Activity implements OnSeekBarChangeListener {
 
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {
-		if (seekBar == axis_y) {
-			axis_y.setProgress(4);
+		if (seekBar == axis_y || seekBar == axis_x) {
+			seekBar.setProgress(3);
+		} else if (seekBar == axis_rotate) {
+			seekBar.setProgress(1);
 		}
 	}
 
