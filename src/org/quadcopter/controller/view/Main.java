@@ -1,5 +1,7 @@
 package org.quadcopter.controller.view;
 import org.quadcopter.controller.R;
+import org.quadcopter.controller.controller.ControllerActivity;
+import org.quadcopter.controller.controller.Quadcopter;
 import org.quadcopter.controller.view.util.VerticalSeekBar;
 
 import android.app.Activity;
@@ -9,11 +11,12 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 
-public class Main extends Activity implements OnSeekBarChangeListener {
+public class Main extends Activity implements OnSeekBarChangeListener, ControllerActivity {
 	private static final String TAG = "MainActiviy";
 	
 	private VerticalSeekBar axis_z, axis_y;
 	private SeekBar axis_x, axis_rotate;
+	private static Quadcopter quad;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,11 @@ public class Main extends Activity implements OnSeekBarChangeListener {
 		
 		axis_rotate = (SeekBar) findViewById(R.id.seek_bar_rotate);
 		axis_rotate.setOnSeekBarChangeListener(this);
+		
+		if (quad == null)
+			quad = new Quadcopter(this);
+		else
+			quad.ControllerActivitySet(this);
 	}
 
 	@Override
@@ -51,4 +59,43 @@ public class Main extends Activity implements OnSeekBarChangeListener {
 		}
 	}
 
+	@Override
+	public void pingRequest(int num) {
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public void pingResponse(int num) {
+		quad.pingRequest(num+1);		
+	}
+
+	@Override
+	public void batteryResponse(int percent) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void radioLevelResponse(int value) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void moveResponse() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void gyroResponse(int x, int y, int z) {
+		Log.d("quad", "Gyro "+x+" "+y+" "+z);
+	}
+
+	@Override
+	public void accelReponse(int x, int y, int z) {
+		Log.d("quad", "Accel "+x+" "+y+" "+z);
+	}
+
+	@Override
+	public void calibrateReponse() {
+		// TODO Auto-generated method stub
+	}
 }
