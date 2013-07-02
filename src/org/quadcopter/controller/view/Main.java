@@ -5,6 +5,7 @@ import org.quadcopter.controller.controller.Quadcopter;
 import org.quadcopter.controller.view.util.VerticalSeekBar;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.SeekBar;
@@ -14,9 +15,11 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 public class Main extends Activity implements OnSeekBarChangeListener, ControllerActivity {
 	private static final String TAG = "MainActiviy";
 	
+	private static Quadcopter quad;
 	private VerticalSeekBar axis_z, axis_y;
 	private SeekBar axis_x, axis_rotate;
-	private static Quadcopter quad;
+	
+	private ProgressDialog progressDialog = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -35,15 +38,18 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 		axis_rotate = (SeekBar) findViewById(R.id.seek_bar_rotate);
 		axis_rotate.setOnSeekBarChangeListener(this);
 		
-		if (quad == null)
+		if (quad == null) {
 			quad = new Quadcopter(this);
+			showProgress();
+		}
 		else
-			quad.ControllerActivitySet(this);
+			quad.controllerSet(this);
 	}
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 		Log.d(TAG, "progress="+progress);
+		quad.requestPing(10);
 	}
 
 	@Override
@@ -60,42 +66,76 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 	}
 
 	@Override
-	public void pingRequest(int num) {
+	public void requestPing(int num) {
 		// TODO Auto-generated method stub		
 	}
 
 	@Override
-	public void pingResponse(int num) {
-		quad.pingRequest(num+1);		
+	public void responsePing(int num) {
+		quad.requestPing(num+1);		
 	}
 
 	@Override
-	public void batteryResponse(int percent) {
+	public void responseBattery(int percent) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void radioLevelResponse(int value) {
+	public void responseRadioLevel(int value) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void moveResponse() {
+	public void responseMove() {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void gyroResponse(int x, int y, int z) {
+	public void responseGyro(int x, int y, int z) {
 		Log.d("quad", "Gyro "+x+" "+y+" "+z);
 	}
 
 	@Override
-	public void accelReponse(int x, int y, int z) {
+	public void responseAccel(int x, int y, int z) {
 		Log.d("quad", "Accel "+x+" "+y+" "+z);
 	}
 
 	@Override
-	public void calibrateReponse() {
+	public void reponseCalibrate() {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void connectedQuad() {
+		Log.d("quad", "connected");
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				if (progressDialog != null) {
+					progressDialog.dismiss();
+					progressDialog = null;
+				}
+			}
+		});
+	}
+	
+	private void showProgress() {
+		if (progressDialog != null)
+			progressDialog.dismiss();
+		progressDialog = new ProgressDialog(this);
+		progressDialog.setIndeterminate(true);
+		progressDialog.setCancelable(false);
+		progressDialog.setTitle(R.string.quad_disconnected);
+		progressDialog.show();
+	}
+
+	@Override
+	public void disconnectedQuad() {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				showProgress();
+			}
+		});
 	}
 }
