@@ -91,12 +91,12 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 	}
 
 	@Override
-	public void responseGyro(int x, int y, int z) {
+	public void responseGyro(float x, float y, float z) {
 		Log.d("quad", "Gyro "+x+" "+y+" "+z);
 	}
 
 	@Override
-	public void responseAccel(int x, int y, int z) {
+	public void responseAccel(float x, float y, float z) {
 		Log.d("quad", "Accel "+x+" "+y+" "+z);
 	}
 

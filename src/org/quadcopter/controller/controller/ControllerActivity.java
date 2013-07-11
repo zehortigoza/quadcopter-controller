@@ -6,8 +6,8 @@ public interface ControllerActivity {
 	public void responseBattery(int percent);
 	public void responseRadioLevel(int value);
 	public void responseMove();
-	public void responseGyro(int x, int y, int z);
-	public void responseAccel(int x, int y, int z);
+	public void responseGyro(float x, float y, float z);
+	public void responseAccel(float x, float y, float z);
 	public void reponseCalibrate();
 
 	public void connectedQuad();

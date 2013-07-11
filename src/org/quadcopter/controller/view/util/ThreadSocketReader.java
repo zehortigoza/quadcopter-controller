@@ -84,18 +84,18 @@ public class ThreadSocketReader extends Thread {
 			}
 		} else if (tokens[1].charAt(0) == Quadcopter.GYRO) {
 			if (tokens[2].charAt(0) == '0') {
-				int x, y, z;
-				x = Integer.parseInt(tokens[3]);
-				y = Integer.parseInt(tokens[4]);
-				z = Integer.parseInt(tokens[5]);
+				float x, y, z;
+				x = Float.parseFloat(tokens[3]);
+				y = Float.parseFloat(tokens[4]);
+				z = Float.parseFloat(tokens[5]);
 				quad.controllerGet().responseGyro(x, y, z);
 			}
 		} else if (tokens[1].charAt(0) == Quadcopter.ACCELEROMETER) {
 			if (tokens[2].charAt(0) == '0') {
-				int x, y, z;
-				x = Integer.parseInt(tokens[3]);
-				y = Integer.parseInt(tokens[4]);
-				z = Integer.parseInt(tokens[5]);
+				float x, y, z;
+				x = Float.parseFloat(tokens[3]);
+				y = Float.parseFloat(tokens[4]);
+				z = Float.parseFloat(tokens[5]);
 				quad.controllerGet().responseAccel(x, y, z);
 			}
 		} else if (tokens[1].charAt(0) == Quadcopter.CALIBRATE) {
