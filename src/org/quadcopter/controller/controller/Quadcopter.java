@@ -13,7 +13,7 @@ import org.quadcopter.controller.view.util.ThreadSocketWriter;
 
 public class Quadcopter {
 	public static final int PORT = 9750;
-	public static final String IP = "192.168.43.223";
+	public static final String IP = "192.168.43.7";
 	public static final char PING = 'p';
 	public static final char BATTERY = 'b';
 	public static final char RADIO_LEVEL = 'r';
@@ -100,6 +100,13 @@ public class Quadcopter {
 		threadReadList.add(listener);
 	}
 
+	private synchronized ThreadSocketReader getReader() {
+		if (threadReadList.size() > 0)
+			return threadReadList.get(0);
+		else
+			return null;
+	}
+
 	public synchronized void removeThread(ThreadSocketReader listener) {
 		threadReadList.remove(listener);
 		if (socketListen == null && threadReadList.size() == 0)
@@ -119,37 +126,37 @@ public class Quadcopter {
 	}
 	
 	public void requestPing(final int num) {
-		new ThreadSocketWriter("^;p;1;"+num+";$").start();
+		new ThreadSocketWriter("^;p;1;"+num+";$", getReader()).start();
 	}
 	
 	public void responsePing(int num) {
-		new ThreadSocketWriter("^;p;0;"+num+";$").start();
+		new ThreadSocketWriter("^;p;0;"+num+";$", getReader()).start();
 	}
 	
 	public void requestBattery() {
-		new ThreadSocketWriter("^;b;1;$").start();
+		new ThreadSocketWriter("^;b;1;$", getReader()).start();
 	}
 	
 	public void requestRadioLevel() {
-		new ThreadSocketWriter("^;r;1;$").start();
+		new ThreadSocketWriter("^;r;1;$", getReader()).start();
 	}
 	
 	public void requestMove(char axis, int value) {
 		if (axis != AXIS_ROTATE && axis != AXIS_X &&
 		    axis != AXIS_Y && axis != AXIS_Z)
 			return;
-		new ThreadSocketWriter("^;m;1;"+axis+";"+value+";$").start();
+		new ThreadSocketWriter("^;m;1;"+axis+";"+value+";$", getReader()).start();
 	}
 	
 	public void requestGyro() {
-		new ThreadSocketWriter("^;g;1;$").start();
+		new ThreadSocketWriter("^;g;1;$", getReader()).start();
 	}
 	
 	public void requestAccel() {
-		new ThreadSocketWriter("^;a;1;$").start();
+		new ThreadSocketWriter("^;a;1;$", getReader()).start();
 	}
 	
 	public void requestCalibrate() {
-		new ThreadSocketWriter("^;c;1;$").start();
+		new ThreadSocketWriter("^;c;1;$", getReader()).start();
 	}
 }

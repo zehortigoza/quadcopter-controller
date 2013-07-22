@@ -3,6 +3,7 @@ package org.quadcopter.controller.view.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 import org.quadcopter.controller.controller.Quadcopter;
@@ -11,6 +12,7 @@ import android.util.Log;
 
 public class ThreadSocketReader extends Thread {
 	private BufferedReader in;
+	private PrintWriter out;
 	private boolean run = true;
 	private Socket socket;
 	private Quadcopter quad;
@@ -20,6 +22,7 @@ public class ThreadSocketReader extends Thread {
 		this.quad = quad;
 		try {
 			this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			this.out = new PrintWriter(socket.getOutputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -29,6 +32,10 @@ public class ThreadSocketReader extends Thread {
 		run = false;
 	}
 	
+	public PrintWriter getPrintWriter() {
+		return out;
+	}
+
 	private void socketClose() {
 		if (run == false)
 			return;
