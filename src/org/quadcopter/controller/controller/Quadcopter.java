@@ -25,6 +25,7 @@ public class Quadcopter {
 	public static final char AXIS_Y = 'y';
 	public static final char AXIS_Z = 'z';
 	public static final char AXIS_ROTATE = 'r';
+	public static final char DEBUG_MSG = 'd';
 	
 	private ControllerActivity controller;
 	private ThreadSocketServer socketListen;

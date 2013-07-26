@@ -109,6 +109,8 @@ public class ThreadSocketReader extends Thread {
 			if (tokens[2].charAt(0) == '0') {
 				quad.controllerGet().reponseCalibrate();
 			}
+		} else if (tokens[1].charAt(0) == Quadcopter.DEBUG_MSG) {
+			Log.d("quad", "debug: "+tokens[3]);
 		}
 	}
 }
