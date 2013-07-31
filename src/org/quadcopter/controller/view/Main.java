@@ -48,8 +48,7 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-		Log.d(TAG, "progress="+progress);
-		quad.requestPing(10);
+		//Log.d("quad", "progress="+progress);
 	}
 
 	@Override
@@ -58,6 +57,12 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {
+		if (seekBar == axis_z)
+		{
+			quad.requestMove('z', seekBar.getProgress());
+			Log.d("quad", "final z progress="+seekBar.getProgress());
+		}
+		
 		if (seekBar == axis_y || seekBar == axis_x) {
 			seekBar.setProgress(3);
 		} else if (seekBar == axis_rotate) {
