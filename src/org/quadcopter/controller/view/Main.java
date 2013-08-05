@@ -8,17 +8,24 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 
 public class Main extends Activity implements OnSeekBarChangeListener, ControllerActivity {
-	private static final String TAG = "MainActiviy";
+	public static final String TAG = "quad";
 	
 	private static Quadcopter quad;
 	private VerticalSeekBar axis_z, axis_y;
 	private SeekBar axis_x, axis_rotate;
 	
+	private Button turn_on_off;
+	private boolean motors_on = false;
+	private static final String TAG_MOTORS_STATE = "motors_state";
+
 	private ProgressDialog progressDialog = null;
 	
 	@Override
@@ -38,12 +45,48 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 		axis_rotate = (SeekBar) findViewById(R.id.seek_bar_rotate);
 		axis_rotate.setOnSeekBarChangeListener(this);
 		
+		turn_on_off = (Button) findViewById(R.id.btn_turn_on_off);
+		turn_on_off.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				motors_on = !motors_on;
+				axis_z.setEnabled(motors_on);
+				axis_z.setProgress(0);
+
+				if (motors_on == true)
+					quad.requestMove('z', axis_z.getProgress()+1);
+				else
+					quad.requestMove('z', 0);
+				updateLabelBtn();
+			}
+		});
+
+		if (savedInstanceState != null)
+			motors_on = savedInstanceState.getBoolean(TAG_MOTORS_STATE);
+		axis_z.setEnabled(motors_on);
+		updateLabelBtn();
+
+
 		if (quad == null) {
 			quad = new Quadcopter(this);
 			showProgress();
 		}
 		else
 			quad.controllerSet(this);
+	}
+
+	private void updateLabelBtn()
+	{
+		if (motors_on == true)
+			turn_on_off.setText(this.getString(R.string.turn_off));
+		else
+			turn_on_off.setText(this.getString(R.string.turn_on));
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+		savedInstanceState.putBoolean(TAG_MOTORS_STATE, motors_on);
 	}
 
 	@Override
@@ -59,8 +102,8 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 	public void onStopTrackingTouch(SeekBar seekBar) {
 		if (seekBar == axis_z)
 		{
-			quad.requestMove('z', seekBar.getProgress());
-			Log.d("quad", "final z progress="+seekBar.getProgress());
+			quad.requestMove('z', seekBar.getProgress()+1);
+			Log.d(Main.TAG, "final z progress="+(seekBar.getProgress()+1));
 		}
 		
 		if (seekBar == axis_y || seekBar == axis_x) {
@@ -97,12 +140,12 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 
 	@Override
 	public void responseGyro(float x, float y, float z) {
-		Log.d("quad", "Gyro "+x+" "+y+" "+z);
+		Log.d(Main.TAG, "Gyro "+x+" "+y+" "+z);
 	}
 
 	@Override
 	public void responseAccel(float x, float y, float z) {
-		Log.d("quad", "Accel "+x+" "+y+" "+z);
+		Log.d(Main.TAG, "Accel "+x+" "+y+" "+z);
 	}
 
 	@Override
@@ -112,7 +155,7 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 
 	@Override
 	public void connectedQuad() {
-		Log.d("quad", "connected");
+		Log.d(Main.TAG, "connected");
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {

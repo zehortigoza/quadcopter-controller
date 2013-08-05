@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import org.quadcopter.controller.controller.Quadcopter;
+import org.quadcopter.controller.view.Main;
 
 import android.util.Log;
 
@@ -46,7 +47,7 @@ public class ThreadSocketReader extends Thread {
 			e.printStackTrace();
 		}			
 		run = false;
-		Log.d("quad", "ThreadListener - socket close");
+		Log.d(Main.TAG, "ThreadListener - socket close");
 	}
 	
 	public void run() {
@@ -55,7 +56,7 @@ public class ThreadSocketReader extends Thread {
 				String msg = in.readLine();
 				if (msg == null)
 						socketClose();
-				Log.d("quad", "msg received: "+msg);
+				Log.d(Main.TAG, "msg received: "+msg);
 				if (msg.charAt(0) == '^' && msg.endsWith("$"))
 					msgHandle(msg);
 			} catch (Exception e) {
@@ -110,7 +111,7 @@ public class ThreadSocketReader extends Thread {
 				quad.controllerGet().reponseCalibrate();
 			}
 		} else if (tokens[1].charAt(0) == Quadcopter.DEBUG_MSG) {
-			Log.d("quad", "debug: "+tokens[3]);
+			Log.d(Main.TAG, "debug: "+tokens[3]);
 		}
 	}
 }

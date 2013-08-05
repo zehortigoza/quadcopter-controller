@@ -81,7 +81,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="center_horizontal"
-            android:max="255"
+            android:max="254"
             android:maxHeight="1000dp" />        
     </LinearLayout>
        
@@ -112,4 +112,17 @@
             android:maxHeight="1000dp" />        
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/turn_on_off"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/axis_x"
+        android:layout_toRightOf="@+id/axis_z"
+        android:layout_toLeftOf="@+id/axis_y">
+        <Button
+            android:id="@+id/btn_turn_on_off"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/turn_on" />
+    </LinearLayout>
 </RelativeLayout>

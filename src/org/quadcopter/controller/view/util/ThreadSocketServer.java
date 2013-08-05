@@ -4,6 +4,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import org.quadcopter.controller.controller.Quadcopter;
+import org.quadcopter.controller.view.Main;
 
 import android.util.Log;
 
@@ -38,7 +39,7 @@ public class ThreadSocketServer extends Thread {
 			Socket socket;
 			try {
 				socket = serverSocket.accept();
-				Log.d("quad", "socket accept");
+				Log.d(Main.TAG, "socket accept");
 				if (socket != null)
 					if (quad.connectedSocket(socket) == false)
 						socket.close();					

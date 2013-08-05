@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import org.quadcopter.controller.controller.Quadcopter;
+import org.quadcopter.controller.view.Main;
 
 import android.util.Log;
 
@@ -37,7 +38,7 @@ public class ThreadSocketWriter extends Thread {
 				out.close();
 				socket.close();
 			}
-			Log.d("quad", "send: "+msg);
+			Log.d(Main.TAG, "send: "+msg);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
