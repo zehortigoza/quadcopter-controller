@@ -5,11 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.quadcopter.controller.view.Main;
 import org.quadcopter.controller.view.util.ThreadSocketReader;
 import org.quadcopter.controller.view.util.ThreadSocketServer;
 import org.quadcopter.controller.view.util.ThreadSocketWriter;
+
+import android.util.Log;
 
 public class Quadcopter {
 	public static final int PORT = 9750;
@@ -37,8 +41,13 @@ public class Quadcopter {
 	private boolean connected = false;
 	private int waitingPingResponse = 180;
 	
+	//last move, send it every 400miliseconds
+	private char axis;
+	private int value;
+	ScheduledFuture<?> repeater = null;
+
 	public Quadcopter(ControllerActivity controller) {
-		this.controller = controller;		
+		this.controller = controller;
 		socketListen = new ThreadSocketServer(this, PORT);
 		socketListen.start();
 		threadReadList = new ArrayList<ThreadSocketReader>();
@@ -147,6 +156,25 @@ public class Quadcopter {
 		    axis != AXIS_Y && axis != AXIS_Z)
 			return;
 		new ThreadSocketWriter("^;m;1;"+axis+";"+value+";$", getReader()).start();
+		
+		if (axis != AXIS_Z) {
+			this.axis = axis;
+			this.value = value;
+			
+			if (repeater != null)
+				repeater.cancel(false);
+			repeater = null;
+			
+			if (value == 0)
+				return;
+			
+			repeater = scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
+				@Override
+				public void run() {
+					new ThreadSocketWriter("^;m;1;"+Quadcopter.this.axis+";"+Quadcopter.this.value+";$", getReader()).start();
+				}
+			}, 400, 400, TimeUnit.MILLISECONDS);
+		}
 	}
 	
 	public void requestGyro() {

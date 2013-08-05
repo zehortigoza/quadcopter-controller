@@ -91,7 +91,26 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-		//Log.d("quad", "progress="+progress);
+		char axis = 0;
+		
+		if (seekBar == axis_y) {
+			axis = 'y';
+			progress = progress - 3;
+		}
+		else if (seekBar == axis_x) {
+			axis = 'x';
+			progress = progress - 3;
+		}
+		else if (seekBar == axis_rotate) {
+			axis = 'r';
+			progress = progress - 1;
+		}
+		
+		if (axis == 0)
+			return;
+		
+		Log.d(Main.TAG, "axis="+axis+" progress="+progress);
+		quad.requestMove(axis, progress);
 	}
 
 	@Override
@@ -105,7 +124,7 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 			quad.requestMove('z', seekBar.getProgress()+1);
 			Log.d(Main.TAG, "final z progress="+(seekBar.getProgress()+1));
 		}
-		
+
 		if (seekBar == axis_y || seekBar == axis_x) {
 			seekBar.setProgress(3);
 		} else if (seekBar == axis_rotate) {
