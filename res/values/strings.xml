@@ -5,7 +5,7 @@
 	<string name="y_label">Y</string>
 	<string name="x_label">X</string>
 	<string name="rotate_label">Rotate</string>
-	<string name="quad_disconnected">Quadcopter disconnected, trying connect...</string>
+	<string name="quad_disconnected">Quadcopter disconnected, trying connect&#8230;</string>
 	<string name="turn_on">Turn on</string>
 	<string name="turn_off">Turn off</string>
 </resources>
