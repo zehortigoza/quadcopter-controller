@@ -137,11 +137,13 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 
 	@Override
 	public void requestPing(int num) {
+		Log.d("quad2", "request");
 		// TODO Auto-generated method stub		
 	}
 
 	@Override
 	public void responsePing(int num) {
+		Log.d("quad2", "response");
 		quad.requestPing(num+1);		
 	}
 

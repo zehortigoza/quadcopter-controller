@@ -75,8 +75,7 @@ public class ThreadSocketReader extends Thread {
 				quad.controllerGet().requestPing(Integer.parseInt(tokens[3]));					
 			} else {
 				int num = Integer.parseInt(tokens[3]);
-				if (quad.handlePing(num) == false)
-						quad.controllerGet().responsePing(num);					
+				quad.handlePing(num);				
 			}
 		} else if (tokens[1].charAt(0) == Quadcopter.BATTERY) {
 			if (tokens[2].charAt(0) == '0') {

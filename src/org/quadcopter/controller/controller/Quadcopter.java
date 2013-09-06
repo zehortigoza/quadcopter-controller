@@ -59,24 +59,27 @@ public class Quadcopter {
 				if (waitingPingResponse != 0) {
 					if (connected == true) {
 						Quadcopter.this.controller.disconnectedQuad();
+						Log.d("quad2", "disconnected waitingPingResponse="+waitingPingResponse);
 						connected = false;
 					}
 				}
+				Log.d("quad2", "task each 5 seconds.");
 				requestPing(179);
 				waitingPingResponse = 180;
 			}
 		}, 0, 5, TimeUnit.SECONDS);
 	}
 	
-	public boolean handlePing(int num) {
-		if (waitingPingResponse == 0 || waitingPingResponse != num)
-			return false;
-		waitingPingResponse = 0;
-		if (connected == false) {
-			controller.connectedQuad();
-			connected = true;
+	public void handlePing(int num) {
+		if (waitingPingResponse == num) {
+			waitingPingResponse = 0;
+			Log.d("quad2", "ping handled");
+			if (connected == false) {
+				connected = true;
+				controller.connectedQuad();
+			}
 		}
-		return true;
+		return;
 	}
 	
 	public void controllerSet(ControllerActivity controller) {
@@ -136,6 +139,7 @@ public class Quadcopter {
 	}
 	
 	public void requestPing(final int num) {
+		Log.d("quad2", "ping="+num);
 		new ThreadSocketWriter("^;p;1;"+num+";$", getReader()).start();
 	}
 	
