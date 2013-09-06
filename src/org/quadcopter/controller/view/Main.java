@@ -54,7 +54,7 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 				axis_z.setProgress(0);
 
 				if (motors_on == true)
-					quad.requestMove('z', axis_z.getProgress()+1);
+					quad.requestMove('z', axis_z.getProgress()+1000);
 				else
 					quad.requestMove('z', 0);
 				updateLabelBtn();
@@ -93,6 +93,9 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 		char axis = 0;
 		
+		if (seekBar == axis_z)
+			return;
+		
 		if (seekBar == axis_y) {
 			axis = 'y';
 			progress = progress - 3;
@@ -121,7 +124,7 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 	public void onStopTrackingTouch(SeekBar seekBar) {
 		if (seekBar == axis_z)
 		{
-			quad.requestMove('z', seekBar.getProgress()+1);
+			quad.requestMove('z', seekBar.getProgress()+1000);
 			Log.d(Main.TAG, "final z progress="+(seekBar.getProgress()+1));
 		}
 
