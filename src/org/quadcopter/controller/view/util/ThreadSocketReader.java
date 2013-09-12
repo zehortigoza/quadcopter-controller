@@ -70,26 +70,31 @@ public class ThreadSocketReader extends Thread {
 	private void msgHandle(String msg) {
 		String tokens[] = msg.split(";");
 		
-		if (tokens[1].charAt(0) == Quadcopter.PING) {
+		switch(tokens[1].charAt(0)) {
+		case Quadcopter.PING:
 			if (tokens[2].charAt(0) == '1') {
 				quad.controllerGet().requestPing(Integer.parseInt(tokens[3]));					
 			} else {
 				int num = Integer.parseInt(tokens[3]);
 				quad.handlePing(num);				
 			}
-		} else if (tokens[1].charAt(0) == Quadcopter.BATTERY) {
+			break;
+		case Quadcopter.BATTERY:
 			if (tokens[2].charAt(0) == '0') {
 				quad.controllerGet().responseBattery(Integer.parseInt(tokens[3]));
 			}
-		} else if (tokens[1].charAt(0) == Quadcopter.RADIO_LEVEL) {
+			break;
+		case Quadcopter.RADIO_LEVEL:
 			if (tokens[2].charAt(0) == '0') {
 				quad.controllerGet().responseRadioLevel(Integer.parseInt(tokens[3]));
 			}
-		} else if (tokens[1].charAt(0) == Quadcopter.MOVE) {
+			break;
+		case Quadcopter.MOVE:
 			if (tokens[2].charAt(0) == '0') {
 				quad.controllerGet().responseMove();
 			}
-		} else if (tokens[1].charAt(0) == Quadcopter.GYRO) {
+			break;
+		case Quadcopter.GYRO:
 			if (tokens[2].charAt(0) == '0') {
 				float x, y, z;
 				x = Float.parseFloat(tokens[3]);
@@ -97,7 +102,8 @@ public class ThreadSocketReader extends Thread {
 				z = Float.parseFloat(tokens[5]);
 				quad.controllerGet().responseGyro(x, y, z);
 			}
-		} else if (tokens[1].charAt(0) == Quadcopter.ACCELEROMETER) {
+			break;
+		case Quadcopter.ACCELEROMETER:
 			if (tokens[2].charAt(0) == '0') {
 				float x, y, z;
 				x = Float.parseFloat(tokens[3]);
@@ -105,12 +111,17 @@ public class ThreadSocketReader extends Thread {
 				z = Float.parseFloat(tokens[5]);
 				quad.controllerGet().responseAccel(x, y, z);
 			}
-		} else if (tokens[1].charAt(0) == Quadcopter.CALIBRATE) {
+			break;
+		case Quadcopter.CALIBRATE:
 			if (tokens[2].charAt(0) == '0') {
 				quad.controllerGet().reponseCalibrate();
 			}
-		} else if (tokens[1].charAt(0) == Quadcopter.DEBUG_MSG) {
+			break;
+		case Quadcopter.DEBUG_MSG:
 			Log.d(Main.TAG, "debug: "+tokens[3]);
+			break;
+		default:
+			Log.d(Main.TAG, "Invalid message type: "+tokens[1].charAt(0));
 		}
 	}
 }
