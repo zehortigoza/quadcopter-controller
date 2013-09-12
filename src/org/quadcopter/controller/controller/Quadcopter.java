@@ -8,7 +8,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.quadcopter.controller.view.Main;
 import org.quadcopter.controller.view.util.ThreadSocketReader;
 import org.quadcopter.controller.view.util.ThreadSocketServer;
 import org.quadcopter.controller.view.util.ThreadSocketWriter;
@@ -24,6 +23,7 @@ public class Quadcopter {
 	public static final char MOVE = 'm';
 	public static final char GYRO = 'g';
 	public static final char ACCELEROMETER = 'a';
+	public static final char ORIENTATION = 'o';
 	public static final char CALIBRATE = 'c';
 	public static final char AXIS_X = 'x';
 	public static final char AXIS_Y = 'y';
@@ -34,6 +34,8 @@ public class Quadcopter {
 	private ControllerActivity controller;
 	private ThreadSocketServer socketListen;
 	
+	private static Sensors sSensorActivity = null;
+
 	private List<ThreadSocketReader> threadReadList = null;
 	
 	private ScheduledExecutorService scheduleTaskExecutor;
@@ -138,6 +140,11 @@ public class Quadcopter {
 		return true;
 	}
 	
+	public void requestOrientation(final boolean enable) {
+		int resp = enable ? 1 : 0;
+		new ThreadSocketWriter("^;o;1;"+resp+";$", getReader()).start();
+	}
+	
 	public void requestPing(final int num) {
 		Log.d("quad2", "ping="+num);
 		new ThreadSocketWriter("^;p;1;"+num+";$", getReader()).start();
@@ -191,5 +198,13 @@ public class Quadcopter {
 	
 	public void requestCalibrate() {
 		new ThreadSocketWriter("^;c;1;$", getReader()).start();
+	}
+
+	public static void setSensorActivity(Sensors activity) {
+		sSensorActivity = activity;
+	}
+
+	public static Sensors getSensorActivity() {
+		return sSensorActivity;
 	}
 }

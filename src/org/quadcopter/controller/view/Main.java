@@ -6,8 +6,12 @@ import org.quadcopter.controller.view.util.VerticalSeekBar;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -74,7 +78,13 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 		else
 			quad.controllerSet(this);
 	}
-
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		quad.requestOrientation(false);
+	}
+	
 	private void updateLabelBtn()
 	{
 		if (motors_on == true)
@@ -210,4 +220,24 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 			}
 		});
 	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main_menu, menu);
+	    return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.cube_menu_option:
+			Intent intent = new Intent(this, CubeActivity.class);
+			quad.requestOrientation(true);
+			startActivity(intent);
+			return true;
+		}
+		return false;
+	}
+
 }

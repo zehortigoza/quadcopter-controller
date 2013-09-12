@@ -120,6 +120,16 @@ public class ThreadSocketReader extends Thread {
 		case Quadcopter.DEBUG_MSG:
 			Log.d(Main.TAG, "debug: "+tokens[3]);
 			break;
+		case Quadcopter.ORIENTATION:
+			if (tokens[2].charAt(0) == '0') {
+				float roll, pitch, yaw;
+				roll = Float.parseFloat(tokens[3]);
+				pitch = Float.parseFloat(tokens[4]);
+				yaw = Float.parseFloat(tokens[5]);
+				if (Quadcopter.getSensorActivity() != null)
+					Quadcopter.getSensorActivity().updateOrientation(roll, pitch, yaw);
+			}
+			break;
 		default:
 			Log.d(Main.TAG, "Invalid message type: "+tokens[1].charAt(0));
 		}

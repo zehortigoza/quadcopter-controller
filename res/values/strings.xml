@@ -8,4 +8,5 @@
 	<string name="quad_disconnected">Quadcopter disconnected, trying connect&#8230;</string>
 	<string name="turn_on">Turn on</string>
 	<string name="turn_off">Turn off</string>
+	<string name="cube_menu">Cube(debug gyro and accelerometer)</string>
 </resources>
