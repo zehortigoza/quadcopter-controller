@@ -8,6 +8,7 @@ import java.net.Socket;
 
 import org.quadcopter.controller.controller.Quadcopter;
 import org.quadcopter.controller.view.Main;
+import org.quadcopter.model.SettingsData;
 
 import android.util.Log;
 
@@ -130,6 +131,24 @@ public class ThreadSocketReader extends Thread {
 					Quadcopter.getSensorActivity().updateOrientation(roll, pitch, yaw);
 			}
 			break;
+		case Quadcopter.CONFIG_READ:
+			if (tokens[2].charAt(0) == '0') {
+				SettingsData data = new SettingsData();
+				float p, i;
+				
+				p = Float.parseFloat(tokens[3]);
+				i = Float.parseFloat(tokens[4]);
+				
+				data.setPidPValue(p);
+				data.setPidIValue(i);
+				quad.controllerGet().reponseConfig(data);
+			}
+			break;
+		case Quadcopter.CONFIG_WRITE:
+			if (tokens[2].charAt(0) == '0') {
+				quad.controllerGet().reponseWriteConfig();
+			}
+		break;
 		default:
 			Log.d(Main.TAG, "Invalid message type: "+tokens[1].charAt(0));
 		}

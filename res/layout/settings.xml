@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginLeft="2dip"
+    android:layout_marginRight="2dip">
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="2dip"
+        android:layout_marginBottom="2dip">
+        <TextView
+            android:layout_width="0dip"
+            android:layout_weight="30"
+            android:layout_height="wrap_content"
+            android:text="@string/pid_p_label"/>
+        <EditText
+            android:layout_width="0dip"
+            android:layout_weight="70"
+            android:layout_height="wrap_content"
+            android:id="@+id/pid_p_value_edit"
+            android:inputType="numberDecimal"/>
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="2dip"
+        android:layout_marginBottom="2dip">
+        <TextView
+            android:layout_width="0dip"
+            android:layout_weight="30"
+            android:layout_height="wrap_content"
+            android:text="@string/pid_i_label"/>
+        <EditText
+            android:layout_width="0dip"
+            android:layout_weight="70"
+            android:layout_height="wrap_content"
+            android:id="@+id/pid_i_value_edit"
+            android:inputType="numberDecimal"/>
+    </LinearLayout>
+    
+    <Button
+        android:id="@+id/save_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:text="@string/save" />
+
+</LinearLayout>

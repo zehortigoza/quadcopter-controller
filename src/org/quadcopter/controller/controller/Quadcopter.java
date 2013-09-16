@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import org.quadcopter.controller.view.util.ThreadSocketReader;
 import org.quadcopter.controller.view.util.ThreadSocketServer;
 import org.quadcopter.controller.view.util.ThreadSocketWriter;
+import org.quadcopter.model.SettingsData;
 
 import android.util.Log;
 
@@ -30,6 +31,8 @@ public class Quadcopter {
 	public static final char AXIS_Z = 'z';
 	public static final char AXIS_ROTATE = 'r';
 	public static final char DEBUG_MSG = 'd';
+	public static final char CONFIG_READ = 'f';
+	public static final char CONFIG_WRITE = 'w';
 	
 	private Controller controller;
 	private ThreadSocketServer socketListen;
@@ -194,6 +197,14 @@ public class Quadcopter {
 	
 	public void requestAccel() {
 		new ThreadSocketWriter("^;a;1;$", getReader()).start();
+	}
+	
+	public void requestConfigs() {
+		new ThreadSocketWriter("^;f;1;$", getReader()).start();
+	}
+	
+	public void writeConfigs(SettingsData data) {
+		new ThreadSocketWriter("^;w;1;"+data.getPidPValue()+";"+data.getPidIValue()+";$", getReader()).start();
 	}
 	
 	public void requestCalibrate() {

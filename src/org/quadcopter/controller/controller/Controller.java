@@ -1,6 +1,8 @@
 package org.quadcopter.controller.controller;
 
-public interface Controller {	
+import org.quadcopter.model.SettingsData;
+
+public interface Controller {
 	public void requestPing(int num);//quad ask ping
 	public void responsePing(int num);//quad awnser ping
 	public void responseBattery(int percent);
@@ -9,6 +11,8 @@ public interface Controller {
 	public void responseGyro(float x, float y, float z);
 	public void responseAccel(float x, float y, float z);
 	public void reponseCalibrate();
+	public void reponseConfig(SettingsData settings);
+	public void reponseWriteConfig();
 
 	public void connectedQuad();
 	public void disconnectedQuad();

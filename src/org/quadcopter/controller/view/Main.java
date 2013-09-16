@@ -1,8 +1,11 @@
 package org.quadcopter.controller.view;
+import java.io.Serializable;
+
 import org.quadcopter.controller.R;
 import org.quadcopter.controller.controller.Controller;
 import org.quadcopter.controller.controller.Quadcopter;
 import org.quadcopter.controller.view.util.VerticalSeekBar;
+import org.quadcopter.model.SettingsData;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -29,6 +32,10 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 	private Button turn_on_off;
 	private boolean motors_on = false;
 	private static final String TAG_MOTORS_STATE = "motors_state";
+	
+	public static final String KEY_SETTINGS = "settings";
+	private static final int SETTINGS_REQUEST = 12;
+	private SettingsData settingsData = new SettingsData();
 
 	private ProgressDialog progressDialog = null;
 	
@@ -199,6 +206,7 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 				}
 			}
 		});
+		quad.requestConfigs();
 	}
 	
 	private void showProgress() {
@@ -230,14 +238,46 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+		
 		switch (item.getItemId()) {
 		case R.id.cube_menu_option:
-			Intent intent = new Intent(this, CubeActivity.class);
+			intent = new Intent(this, CubeActivity.class);
 			quad.requestOrientation(true);
 			startActivity(intent);
 			return true;
+		case R.id.settings_menu_option:
+			intent = new Intent(this, SettingsActivity.class);
+			intent.putExtra(KEY_SETTINGS, settingsData);
+			startActivityForResult(intent, SETTINGS_REQUEST);
 		}
 		return false;
 	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Serializable serializable;
+		SettingsData settings;
+		
+		if (requestCode != SETTINGS_REQUEST)
+			return;
+		if (resultCode != RESULT_OK)
+			return;
+		
+		serializable = data.getSerializableExtra(KEY_SETTINGS);
+		if (serializable == null)
+			return;
+		settings = (SettingsData)serializable;
+		quad.writeConfigs(settings);
+	}
 
+	@Override
+	public void reponseConfig(SettingsData settings) {
+		settingsData = settings;
+	}
+
+	@Override
+	public void reponseWriteConfig() {
+		quad.requestConfigs();
+	}
 }
