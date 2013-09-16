@@ -1,6 +1,6 @@
 package org.quadcopter.controller.controller;
 
-public interface ControllerActivity {	
+public interface Controller {	
 	public void requestPing(int num);//quad ask ping
 	public void responsePing(int num);//quad awnser ping
 	public void responseBattery(int percent);

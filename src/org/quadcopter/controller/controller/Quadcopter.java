@@ -31,7 +31,7 @@ public class Quadcopter {
 	public static final char AXIS_ROTATE = 'r';
 	public static final char DEBUG_MSG = 'd';
 	
-	private ControllerActivity controller;
+	private Controller controller;
 	private ThreadSocketServer socketListen;
 	
 	private static Sensors sSensorActivity = null;
@@ -48,7 +48,7 @@ public class Quadcopter {
 	private int value;
 	ScheduledFuture<?> repeater = null;
 
-	public Quadcopter(ControllerActivity controller) {
+	public Quadcopter(Controller controller) {
 		this.controller = controller;
 		socketListen = new ThreadSocketServer(this, PORT);
 		socketListen.start();
@@ -84,7 +84,7 @@ public class Quadcopter {
 		return;
 	}
 	
-	public void controllerSet(ControllerActivity controller) {
+	public void controllerSet(Controller controller) {
 		this.controller = controller;
 		if (connected == true)
 			controller.connectedQuad();
@@ -92,7 +92,7 @@ public class Quadcopter {
 			controller.disconnectedQuad();
 	}
 
-	public ControllerActivity controllerGet() {
+	public Controller controllerGet() {
 		return controller;
 	}
 

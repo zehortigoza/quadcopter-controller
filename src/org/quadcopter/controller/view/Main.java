@@ -1,6 +1,6 @@
 package org.quadcopter.controller.view;
 import org.quadcopter.controller.R;
-import org.quadcopter.controller.controller.ControllerActivity;
+import org.quadcopter.controller.controller.Controller;
 import org.quadcopter.controller.controller.Quadcopter;
 import org.quadcopter.controller.view.util.VerticalSeekBar;
 
@@ -19,7 +19,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 
-public class Main extends Activity implements OnSeekBarChangeListener, ControllerActivity {
+public class Main extends Activity implements OnSeekBarChangeListener, Controller {
 	public static final String TAG = "quad";
 	
 	private static Quadcopter quad;
