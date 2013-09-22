@@ -1,5 +1,5 @@
 package org.quadcopter.controller.controller;
 
 public interface Sensors {
-	public void updateOrientation(float roll, float pitch, float yaw);
+	public void updateOrientation(final float roll, final float pitch, final float yaw);
 }

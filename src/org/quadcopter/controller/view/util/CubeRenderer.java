@@ -16,7 +16,7 @@ public class CubeRenderer implements Renderer, Sensors {
     private float baseRoll = 0;
     private float baseYaw = 0;
     
-    public void updateOrientation(float roll, float pitch, float yaw) {
+    public void updateOrientation(final float roll, final float pitch, final float yaw) {
     	baseRoll = roll;
     	basePitch = pitch;
     	baseYaw = yaw;
