@@ -41,7 +41,7 @@ public class ThreadSocketServer extends Thread {
 				socket = serverSocket.accept();
 				Log.d(Main.TAG, "socket accept");
 				if (socket != null)
-					if (quad.connectedSocket(socket) == false)
+					if (quad.onSocketConnectionOpen(socket) == false)
 						socket.close();					
 			} catch (Exception e) {
 				e.printStackTrace();

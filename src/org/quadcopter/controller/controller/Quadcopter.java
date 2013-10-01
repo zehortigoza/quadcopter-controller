@@ -34,22 +34,22 @@ public class Quadcopter {
 	public static final char CONFIG_READ = 'f';
 	public static final char CONFIG_WRITE = 'w';
 	
-	private Controller controller = null;
-	private ThreadSocketServer socketListen;
+	private Controller mController = null;
+	private ThreadSocketServer mSocketListen;
 	
 	private static Sensors sSensorActivity = null;
 
-	private List<ThreadSocketReader> threadReadList = null;
+	private List<ThreadSocketReader> mThreadReadList = null;
 	
-	private ScheduledExecutorService scheduleTaskExecutor;
+	private ScheduledExecutorService mScheduleTaskExecutor;
 	
-	private boolean connected = false;
-	private int waitingPingResponse = 180;
+	private boolean mConnected = false;
+	private int mWaitingPingResponse = 180;
 	
 	//last move, send it every 400miliseconds
-	private char axis;
-	private int value;
-	ScheduledFuture<?> repeater = null;
+	private char mAxis;
+	private int mValue;
+	ScheduledFuture<?> mRepeater = null;
 
 	private static Quadcopter sQuadcopter = null;
 	
@@ -60,87 +60,87 @@ public class Quadcopter {
 	}
 
 	private Quadcopter() {
-		socketListen = new ThreadSocketServer(this, PORT);
-		socketListen.start();
-		threadReadList = new ArrayList<ThreadSocketReader>();
-		scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
+		mSocketListen = new ThreadSocketServer(this, PORT);
+		mSocketListen.start();
+		mThreadReadList = new ArrayList<ThreadSocketReader>();
+		mScheduleTaskExecutor = Executors.newScheduledThreadPool(5);
 		
-		scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
+		mScheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
-				if (waitingPingResponse != 0) {
-					if (connected == true) {
-						if (Quadcopter.this.controller != null)
-							Quadcopter.this.controller.disconnectedQuad();
-						Log.d("quad2", "disconnected waitingPingResponse="+waitingPingResponse);
-						connected = false;
+				if (mWaitingPingResponse != 0) {
+					if (mConnected == true) {
+						if (Quadcopter.this.mController != null)
+							Quadcopter.this.mController.onQuadDisconnected();
+						Log.d("quad2", "disconnected waitingPingResponse="+mWaitingPingResponse);
+						mConnected = false;
 					}
 				}
 				Log.d("quad2", "task each 5 seconds.");
 				requestPing(179);
-				waitingPingResponse = 180;
+				mWaitingPingResponse = 180;
 			}
 		}, 0, 5, TimeUnit.SECONDS);
 	}
 	
-	public void handlePing(int num) {
-		if (waitingPingResponse == num) {
-			waitingPingResponse = 0;
+	public void onPingResponse(int num) {
+		if (mWaitingPingResponse == num) {
+			mWaitingPingResponse = 0;
 			Log.d("quad2", "ping handled");
-			if (connected == false) {
-				connected = true;
-				if (controller != null)
-					controller.connectedQuad();
+			if (mConnected == false) {
+				mConnected = true;
+				if (mController != null)
+					mController.onQuadConnected();
 			}
 		}
 		return;
 	}
 	
-	public void controllerSet(Controller controller) {
-		this.controller = controller;
-		if (connected == true)
-			controller.connectedQuad();
+	public void setController(Controller controller) {
+		this.mController = controller;
+		if (mConnected == true)
+			controller.onQuadConnected();
 		else
-			controller.disconnectedQuad();
+			controller.onQuadDisconnected();
 	}
 
-	public Controller controllerGet() {
-		return controller;
+	public Controller getController() {
+		return mController;
 	}
 
 	public void exit() {
-		socketListen.exit();
-		socketListen = null;
+		mSocketListen.exit();
+		mSocketListen = null;
 		exitThreads();
-		controller = null;
-		scheduleTaskExecutor.shutdown();
-		scheduleTaskExecutor = null;
+		mController = null;
+		mScheduleTaskExecutor.shutdown();
+		mScheduleTaskExecutor = null;
 	}
 
 	private synchronized void exitThreads() {
-		for (ThreadSocketReader reader : threadReadList) {
+		for (ThreadSocketReader reader : mThreadReadList) {
 			reader.exit();
 		}
 	}
 
 	private synchronized void appendThread(ThreadSocketReader listener) {
-		threadReadList.add(listener);
+		mThreadReadList.add(listener);
 	}
 
 	private synchronized ThreadSocketReader getReader() {
-		if (threadReadList.size() > 0)
-			return threadReadList.get(0);
+		if (mThreadReadList.size() > 0)
+			return mThreadReadList.get(0);
 		else
 			return null;
 	}
 
 	public synchronized void removeThread(ThreadSocketReader listener) {
-		threadReadList.remove(listener);
-		if (socketListen == null && threadReadList.size() == 0)
-			threadReadList = null;
+		mThreadReadList.remove(listener);
+		if (mSocketListen == null && mThreadReadList.size() == 0)
+			mThreadReadList = null;
 	}
 
-	public boolean connectedSocket(Socket socket) {
+	public boolean onSocketConnectionOpen(Socket socket) {
 		ThreadSocketReader listener = null;
 		try {			
 			listener = new ThreadSocketReader(socket, this);
@@ -181,20 +181,20 @@ public class Quadcopter {
 		new ThreadSocketWriter("^;m;1;"+axis+";"+value+";$", getReader()).start();
 		
 		if (axis != AXIS_Z) {
-			this.axis = axis;
-			this.value = value;
+			this.mAxis = axis;
+			this.mValue = value;
 			
-			if (repeater != null)
-				repeater.cancel(false);
-			repeater = null;
+			if (mRepeater != null)
+				mRepeater.cancel(false);
+			mRepeater = null;
 			
 			if (value == 0)
 				return;
 			
-			repeater = scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
+			mRepeater = mScheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
 				@Override
 				public void run() {
-					new ThreadSocketWriter("^;m;1;"+Quadcopter.this.axis+";"+Quadcopter.this.value+";$", getReader()).start();
+					new ThreadSocketWriter("^;m;1;"+Quadcopter.this.mAxis+";"+Quadcopter.this.mValue+";$", getReader()).start();
 				}
 			}, 400, 400, TimeUnit.MILLISECONDS);
 		}

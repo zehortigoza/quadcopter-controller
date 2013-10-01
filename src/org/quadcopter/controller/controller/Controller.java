@@ -11,9 +11,9 @@ public interface Controller {
 	public void responseGyro(float x, float y, float z);
 	public void responseAccel(float x, float y, float z);
 	public void reponseCalibrate();
-	public void reponseConfig(SettingsData settings);
+	public void onReponseConfig(SettingsData settings);
 	public void reponseWriteConfig();
 
-	public void connectedQuad();
-	public void disconnectedQuad();
+	public void onQuadConnected();
+	public void onQuadDisconnected();
 }

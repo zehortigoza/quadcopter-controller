@@ -74,25 +74,25 @@ public class ThreadSocketReader extends Thread {
 		switch(tokens[1].charAt(0)) {
 		case Quadcopter.PING:
 			if (tokens[2].charAt(0) == '1') {
-				quad.controllerGet().requestPing(Integer.parseInt(tokens[3]));					
+				quad.getController().requestPing(Integer.parseInt(tokens[3]));					
 			} else {
 				int num = Integer.parseInt(tokens[3]);
-				quad.handlePing(num);				
+				quad.onPingResponse(num);				
 			}
 			break;
 		case Quadcopter.BATTERY:
 			if (tokens[2].charAt(0) == '0') {
-				quad.controllerGet().responseBattery(Integer.parseInt(tokens[3]));
+				quad.getController().responseBattery(Integer.parseInt(tokens[3]));
 			}
 			break;
 		case Quadcopter.RADIO_LEVEL:
 			if (tokens[2].charAt(0) == '0') {
-				quad.controllerGet().responseRadioLevel(Integer.parseInt(tokens[3]));
+				quad.getController().responseRadioLevel(Integer.parseInt(tokens[3]));
 			}
 			break;
 		case Quadcopter.MOVE:
 			if (tokens[2].charAt(0) == '0') {
-				quad.controllerGet().responseMove();
+				quad.getController().responseMove();
 			}
 			break;
 		case Quadcopter.GYRO:
@@ -101,7 +101,7 @@ public class ThreadSocketReader extends Thread {
 				x = Float.parseFloat(tokens[3]);
 				y = Float.parseFloat(tokens[4]);
 				z = Float.parseFloat(tokens[5]);
-				quad.controllerGet().responseGyro(x, y, z);
+				quad.getController().responseGyro(x, y, z);
 			}
 			break;
 		case Quadcopter.ACCELEROMETER:
@@ -110,12 +110,12 @@ public class ThreadSocketReader extends Thread {
 				x = Float.parseFloat(tokens[3]);
 				y = Float.parseFloat(tokens[4]);
 				z = Float.parseFloat(tokens[5]);
-				quad.controllerGet().responseAccel(x, y, z);
+				quad.getController().responseAccel(x, y, z);
 			}
 			break;
 		case Quadcopter.CALIBRATE:
 			if (tokens[2].charAt(0) == '0') {
-				quad.controllerGet().reponseCalibrate();
+				quad.getController().reponseCalibrate();
 			}
 			break;
 		case Quadcopter.DEBUG_MSG:
@@ -141,12 +141,12 @@ public class ThreadSocketReader extends Thread {
 				
 				data.setPidPValue(p);
 				data.setPidIValue(i);
-				quad.controllerGet().reponseConfig(data);
+				quad.getController().onReponseConfig(data);
 			}
 			break;
 		case Quadcopter.CONFIG_WRITE:
 			if (tokens[2].charAt(0) == '0') {
-				quad.controllerGet().reponseWriteConfig();
+				quad.getController().reponseWriteConfig();
 			}
 		break;
 		default:
