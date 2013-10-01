@@ -25,7 +25,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 public class Main extends Activity implements OnSeekBarChangeListener, Controller {
 	public static final String TAG = "quad";
 	
-	private static Quadcopter quad;
+	private static Quadcopter quad = Quadcopter.getInstance();
 	private VerticalSeekBar axis_z, axis_y;
 	private SeekBar axis_x, axis_rotate;
 	
@@ -77,13 +77,7 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 		axis_z.setEnabled(motors_on);
 		updateLabelBtn();
 
-
-		if (quad == null) {
-			quad = new Quadcopter(this);
-			showProgress();
-		}
-		else
-			quad.controllerSet(this);
+		quad.controllerSet(this);
 	}
 	
 	@Override

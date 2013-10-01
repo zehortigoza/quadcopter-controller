@@ -34,7 +34,7 @@ public class Quadcopter {
 	public static final char CONFIG_READ = 'f';
 	public static final char CONFIG_WRITE = 'w';
 	
-	private Controller controller;
+	private Controller controller = null;
 	private ThreadSocketServer socketListen;
 	
 	private static Sensors sSensorActivity = null;
@@ -51,8 +51,15 @@ public class Quadcopter {
 	private int value;
 	ScheduledFuture<?> repeater = null;
 
-	public Quadcopter(Controller controller) {
-		this.controller = controller;
+	private static Quadcopter sQuadcopter = null;
+	
+	public static Quadcopter getInstance() {
+		if (sQuadcopter == null)
+			sQuadcopter = new Quadcopter();
+		return sQuadcopter;
+	}
+
+	private Quadcopter() {
 		socketListen = new ThreadSocketServer(this, PORT);
 		socketListen.start();
 		threadReadList = new ArrayList<ThreadSocketReader>();
@@ -63,7 +70,8 @@ public class Quadcopter {
 			public void run() {
 				if (waitingPingResponse != 0) {
 					if (connected == true) {
-						Quadcopter.this.controller.disconnectedQuad();
+						if (Quadcopter.this.controller != null)
+							Quadcopter.this.controller.disconnectedQuad();
 						Log.d("quad2", "disconnected waitingPingResponse="+waitingPingResponse);
 						connected = false;
 					}
@@ -81,7 +89,8 @@ public class Quadcopter {
 			Log.d("quad2", "ping handled");
 			if (connected == false) {
 				connected = true;
-				controller.connectedQuad();
+				if (controller != null)
+					controller.connectedQuad();
 			}
 		}
 		return;
