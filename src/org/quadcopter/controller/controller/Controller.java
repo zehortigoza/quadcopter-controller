@@ -13,6 +13,8 @@ public interface Controller {
 	public void reponseCalibrate();
 	public void onReponseConfig(SettingsData settings);
 	public void reponseWriteConfig();
+	public void reponseEscConfigMode();
+	public void reponseEscConfigData();
 
 	public void onQuadConnected();
 	public void onQuadDisconnected();

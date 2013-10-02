@@ -13,4 +13,11 @@
 	<string name="pid_p_label">PID P value:</string>
 	<string name="pid_i_label">PID I value:</string>
 	<string name="save">Save and exit</string>
+	<string name="front_left">Front left</string>
+	<string name="front_right">Front right</string>
+	<string name="back_left">Back left</string>
+	<string name="back_right">Back right</string>
+	<string name="value">Value:</string>
+	<string name="esc_menu">Esc configuration</string>
+	<string name="send">Send</string>
 </resources>

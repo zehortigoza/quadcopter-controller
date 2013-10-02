@@ -31,8 +31,10 @@ public class Quadcopter {
 	public static final char AXIS_Z = 'z';
 	public static final char AXIS_ROTATE = 'r';
 	public static final char DEBUG_MSG = 'd';
-	public static final char CONFIG_READ = 'f';
-	public static final char CONFIG_WRITE = 'w';
+	public static final char CONFIG_READ = 'f';//controller ask for configs
+	public static final char CONFIG_WRITE = 'w';//controller write configs
+	public static final char ESC_CONFIG = 'e';//controller enable esc config mode
+	public static final char ESC_CONFIG_DATA = 'h';//controller send esc configs data
 	
 	private Controller mController = null;
 	private ThreadSocketServer mSocketListen;
@@ -226,5 +228,13 @@ public class Quadcopter {
 
 	public static Sensors getSensorActivity() {
 		return sSensorActivity;
+	}
+
+	public void setEscConfigurationMode(boolean enable) {
+		new ThreadSocketWriter("^;"+ESC_CONFIG+";1;"+(enable ? 1 : 0)+";$", getReader()).start();
+	}
+
+	public void setEscValues(int fl, int fr, int bl, int br) {
+		new ThreadSocketWriter("^;"+ESC_CONFIG_DATA+";1;"+fl+";"+fr+";"+bl+";"+br+";$", getReader()).start();
 	}
 }

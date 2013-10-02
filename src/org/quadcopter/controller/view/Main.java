@@ -84,6 +84,7 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 	public void onResume() {
 		super.onResume();
 		sQuad.requestOrientation(false);
+		sQuad.setEscConfigurationMode(false);
 	}
 	
 	private void updateLabelBtn()
@@ -244,6 +245,11 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 			intent = new Intent(this, SettingsActivity.class);
 			intent.putExtra(KEY_SETTINGS, mSettingsData);
 			startActivityForResult(intent, SETTINGS_REQUEST);
+			return true;
+		case R.id.esc_config_menu_option:
+			intent = new Intent(this, EscActivity.class);
+			startActivity(intent);
+			return true;
 		}
 		return false;
 	}
@@ -273,5 +279,17 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 	@Override
 	public void reponseWriteConfig() {
 		sQuad.requestConfigs();
+	}
+
+	@Override
+	public void reponseEscConfigMode() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reponseEscConfigData() {
+		// TODO Auto-generated method stub
+		
 	}
 }

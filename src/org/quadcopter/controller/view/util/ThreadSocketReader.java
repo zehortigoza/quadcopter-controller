@@ -149,6 +149,16 @@ public class ThreadSocketReader extends Thread {
 				quad.getController().reponseWriteConfig();
 			}
 		break;
+		case Quadcopter.ESC_CONFIG:
+			if (tokens[2].charAt(0) == '0') {
+				quad.getController().reponseEscConfigMode();
+			}
+			break;
+		case Quadcopter.ESC_CONFIG_DATA:
+			if (tokens[2].charAt(0) == '0') {
+				quad.getController().reponseEscConfigData();
+			}
+			break;
 		default:
 			Log.d(Main.TAG, "Invalid message type: "+tokens[1].charAt(0));
 		}

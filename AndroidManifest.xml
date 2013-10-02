@@ -24,6 +24,7 @@
 
         <activity android:name="org.quadcopter.controller.view.CubeActivity" />
         <activity android:name="org.quadcopter.controller.view.SettingsActivity" />
+        <activity android:name="org.quadcopter.controller.view.EscActivity" />
     </application>
 
 </manifest>
