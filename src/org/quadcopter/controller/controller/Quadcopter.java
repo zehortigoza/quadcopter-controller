@@ -46,6 +46,7 @@ public class Quadcopter {
 	private ScheduledExecutorService mScheduleTaskExecutor;
 	
 	private boolean mConnected = false;
+	private boolean mFirstTimeoutPing = true;
 	private int mWaitingPingResponse = 180;
 	
 	//last move, send it every 400miliseconds
@@ -55,6 +56,8 @@ public class Quadcopter {
 
 	private static Quadcopter sQuadcopter = null;
 	
+	private Object mSyncPing = new Object();
+
 	public static Quadcopter getInstance() {
 		if (sQuadcopter == null)
 			sQuadcopter = new Quadcopter();
@@ -70,29 +73,38 @@ public class Quadcopter {
 		mScheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
-				if (mWaitingPingResponse != 0) {
-					if (mConnected == true) {
-						if (Quadcopter.this.mController != null)
-							Quadcopter.this.mController.onQuadDisconnected();
-						Log.d("quad2", "disconnected waitingPingResponse="+mWaitingPingResponse);
-						mConnected = false;
+				synchronized (mSyncPing) {
+					if (mWaitingPingResponse != 0) {
+						if (mConnected == true) {
+							if (mFirstTimeoutPing) {
+								mFirstTimeoutPing = false;
+							} else {
+								if (Quadcopter.this.mController != null)
+									Quadcopter.this.mController.onQuadDisconnected();
+								Log.d("quad", "****disconnected waitingPingResponse="+mWaitingPingResponse);
+								mConnected = false;
+							}
+						}
 					}
+					Log.d("quad2", "task each 5 seconds.");
+					requestPing(179);
+					mWaitingPingResponse = 180;
 				}
-				Log.d("quad2", "task each 5 seconds.");
-				requestPing(179);
-				mWaitingPingResponse = 180;
 			}
-		}, 0, 5, TimeUnit.SECONDS);
+		}, 0, 2, TimeUnit.SECONDS);
 	}
 	
 	public void onPingResponse(int num) {
-		if (mWaitingPingResponse == num) {
-			mWaitingPingResponse = 0;
-			Log.d("quad2", "ping handled");
-			if (mConnected == false) {
-				mConnected = true;
-				if (mController != null)
-					mController.onQuadConnected();
+		synchronized (mSyncPing) {
+			if (mWaitingPingResponse == num) {
+				mWaitingPingResponse = 0;
+				mFirstTimeoutPing = true;
+				Log.d("quad2", "ping handled");
+				if (mConnected == false) {
+					mConnected = true;
+					if (mController != null)
+						mController.onQuadConnected();
+				}
 			}
 		}
 		return;
