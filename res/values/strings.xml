@@ -19,5 +19,6 @@
 	<string name="back_right">Back right</string>
 	<string name="value">Value:</string>
 	<string name="esc_menu">Esc configuration</string>
+	<string name="arm">Arm</string>
 	<string name="send">Send</string>
 </resources>

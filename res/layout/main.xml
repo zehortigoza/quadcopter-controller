@@ -118,11 +118,17 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/axis_x"
         android:layout_toRightOf="@+id/axis_z"
-        android:layout_toLeftOf="@+id/axis_y">
+        android:layout_toLeftOf="@+id/axis_y"
+        android:orientation="vertical">
         <Button
             android:id="@+id/btn_turn_on_off"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/turn_on" />
+        <Button
+            android:id="@+id/btn_arm"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/arm" />
     </LinearLayout>
 </RelativeLayout>

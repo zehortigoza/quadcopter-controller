@@ -33,6 +33,8 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 	private boolean mMotorsOn = false;
 	private static final String TAG_MOTORS_STATE = "motors_state";
 	
+	private Button mBtnArm;
+	
 	public static final String KEY_SETTINGS = "settings";
 	private static final int SETTINGS_REQUEST = 12;
 	private SettingsData mSettingsData = new SettingsData();
@@ -69,6 +71,14 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 				else
 					sQuad.requestMove('z', 0);
 				updateLabelBtn();
+			}
+		});
+		
+		mBtnArm = (Button) findViewById(R.id.btn_arm);
+		mBtnArm.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				sQuad.requestArm();				
 			}
 		});
 

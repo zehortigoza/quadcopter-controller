@@ -214,6 +214,10 @@ public class Quadcopter {
 		}
 	}
 	
+	public void requestArm() {
+		new ThreadSocketWriter("^;s;1;$", getReader()).start();
+	}
+	
 	public void requestGyro() {
 		new ThreadSocketWriter("^;g;1;$", getReader()).start();
 	}
