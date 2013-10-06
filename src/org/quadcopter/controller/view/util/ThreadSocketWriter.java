@@ -34,6 +34,7 @@ public class ThreadSocketWriter extends Thread {
 			}
 			out.println(msg);
 			out.flush();
+			out.flush();
 			if (socket != null) {
 				out.close();
 				socket.close();
