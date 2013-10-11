@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 
@@ -28,6 +29,9 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 	private static Quadcopter sQuad = Quadcopter.getInstance();
 	private VerticalSeekBar mAxisZ, mAxisY;
 	private SeekBar mAxisX, mAxisRotate;
+	private TextView mAxisZValue;
+	private Button mBtnZMinus, mBtnZPlus;
+	private static final int STEP = 25;
 	
 	private Button mBtnOnOff;
 	private boolean mMotorsOn = false;
@@ -79,6 +83,31 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 			@Override
 			public void onClick(View v) {
 				sQuad.requestArm();				
+			}
+		});
+
+		mAxisZValue = (TextView) findViewById(R.id.seek_bar_axis_z_value);
+		mAxisZValue.setText(""+mAxisZ.getProgress());
+		
+		mBtnZPlus = (Button) findViewById(R.id.plus_z_btn);
+		mBtnZPlus.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (mAxisZ.isEnabled()) {
+					mAxisZ.setProgress(mAxisZ.getProgress()+STEP);
+					onStopTrackingTouch(mAxisZ);
+				}
+			}
+		});
+
+		mBtnZMinus = (Button) findViewById(R.id.minus_z_btn);
+		mBtnZMinus.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (mAxisZ.isEnabled()) {
+					mAxisZ.setProgress(mAxisZ.getProgress()-STEP);
+					onStopTrackingTouch(mAxisZ);
+				}
 			}
 		});
 
@@ -144,8 +173,8 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {
-		if (seekBar == mAxisZ)
-		{
+		if (seekBar == mAxisZ) {
+			mAxisZValue.setText(""+seekBar.getProgress());
 			sQuad.requestMove('z', seekBar.getProgress()+1000);
 			Log.d(Main.TAG, "final z progress="+(seekBar.getProgress()+1));
 		}

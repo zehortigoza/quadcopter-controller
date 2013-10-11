@@ -50,13 +50,12 @@
         
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/axis_z"
         android:layout_width="100dp"
         android:layout_height="fill_parent"
         android:layout_below="@+id/rotate"
-        android:layout_above="@+id/axis_x"
-        android:orientation="vertical" >
+        android:layout_above="@+id/axis_x">
 
         <TextView
             android:id="@+id/z_label"
@@ -65,6 +64,31 @@
             android:gravity="center_horizontal"
             android:text="@string/z_label" />
 
+        <Button
+            android:id="@+id/plus_z_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/plus"
+            android:layout_below="@+id/z_label" />
+
+        <Button
+            android:id="@+id/minus_z_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/minus"
+            android:layout_alignParentBottom="true" />
+
+        <TextView
+            android:id="@+id/seek_bar_axis_z_value"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:layout_below="@+id/plus_z_btn"
+            android:layout_above="@+id/minus_z_btn"
+            android:textStyle="bold"/>
+
         <!-- android:maxHeight="1000dp" is a hack to centralize thumb -->
         <org.quadcopter.controller.view.util.VerticalSeekBar
             android:id="@+id/seek_bar_axis_z"
@@ -72,8 +96,10 @@
             android:layout_height="fill_parent"
             android:layout_gravity="center_horizontal"
             android:max="1000"
-            android:maxHeight="1000dp" />        
-    </LinearLayout>
+            android:maxHeight="1000dp"
+            android:layout_below="@+id/plus_z_btn"
+            android:layout_above="@+id/minus_z_btn" />
+    </RelativeLayout>
        
     <LinearLayout
         android:id="@+id/axis_y"
