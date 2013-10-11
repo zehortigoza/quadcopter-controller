@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Quadcopter controller</string>
-	<string name="status">Status: ?1 | Battery: ?2% | Signal: ?3db</string>
 	<string name="z_label">Z</string>
 	<string name="y_label">Y</string>
 	<string name="x_label">X</string>
