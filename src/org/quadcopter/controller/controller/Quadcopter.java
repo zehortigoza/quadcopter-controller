@@ -35,6 +35,7 @@ public class Quadcopter {
 	public static final char CONFIG_WRITE = 'w';//controller write configs
 	public static final char ESC_CONFIG = 'e';//controller enable esc config mode
 	public static final char ESC_CONFIG_DATA = 'h';//controller send esc configs data
+	public static final char BLACKBOX = 'z';
 	
 	private Controller mController = null;
 	private ThreadSocketServer mSocketListen;

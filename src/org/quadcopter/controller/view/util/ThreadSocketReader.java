@@ -1,15 +1,21 @@
 package org.quadcopter.controller.view.util;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import org.json.JSONObject;
 import org.quadcopter.controller.controller.Quadcopter;
 import org.quadcopter.controller.view.Main;
 import org.quadcopter.model.SettingsData;
 
+import android.os.Environment;
 import android.util.Log;
 
 public class ThreadSocketReader extends Thread {
@@ -18,7 +24,9 @@ public class ThreadSocketReader extends Thread {
 	private boolean run = true;
 	private Socket socket;
 	private Quadcopter quad;
-	
+
+	private static FileOutputStream sJsonFile = null;
+
 	public ThreadSocketReader(Socket socket, Quadcopter quad) {
 		this.socket = socket;
 		this.quad = quad;
@@ -159,8 +167,44 @@ public class ThreadSocketReader extends Thread {
 				quad.getController().reponseEscConfigData();
 			}
 			break;
+		case Quadcopter.BLACKBOX:
+			if (tokens[2].charAt(0) == '1') {
+				String json = "{ "+tokens[3]+" }\n";
+				try {
+					JSONObject reader = new JSONObject(json);
+					if (reader.opt("gains") != null) {
+						openFileJson();
+					}
+
+					if (sJsonFile == null)
+						openFileJson();
+					sJsonFile.write(json.getBytes());
+					sJsonFile.flush();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			break;
 		default:
 			Log.d(Main.TAG, "Invalid message type: "+tokens[1].charAt(0));
+		}
+	}
+
+	private void openFileJson() {
+		try {
+			File sdCard = Environment.getExternalStorageDirectory();
+			File dir = new File (sdCard.getAbsolutePath() + "/quad/");
+			dir.mkdirs();
+
+			String filename = new SimpleDateFormat("yyyy-MM-dd_HH:mm").format(new Date());
+			filename = filename+"_json.txt";
+			File file = new File(dir, filename);
+
+			if (sJsonFile != null)
+				sJsonFile.close();
+			sJsonFile = new FileOutputStream(file);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }
