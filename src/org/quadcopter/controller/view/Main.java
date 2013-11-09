@@ -150,12 +150,10 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 		if (seekBar == mAxisY) {
 			axis = 'y';
 			progress = progress - 3;
-		}
-		else if (seekBar == mAxisX) {
+		} else if (seekBar == mAxisX) {
 			axis = 'x';
 			progress = progress - 3;
-		}
-		else if (seekBar == mAxisRotate) {
+		} else if (seekBar == mAxisRotate) {
 			axis = 'r';
 			progress = progress - 1;
 		}
@@ -313,6 +311,7 @@ public class Main extends Activity implements OnSeekBarChangeListener, Controlle
 	@Override
 	public void onReponseConfig(SettingsData settings) {
 		mSettingsData = settings;
+		Log.d(TAG, "Received config="+mSettingsData.toString());
 	}
 
 	@Override

@@ -24,4 +24,8 @@ public class SettingsData implements Serializable {
 	public void setPidIValue(float pidIValue) {
 		this.pidIValue = pidIValue;
 	}
+	
+	public String toString() {
+		return "{ P="+pidPValue+" I="+pidIValue+" }";
+	}
 }
